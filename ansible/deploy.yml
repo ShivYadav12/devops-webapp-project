@@ -1,0 +1,39 @@
+---
+- hosts: web
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - python3-pip
+        state: present
+
+    - name: Install Docker python module
+      pip:
+        name: docker
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Copy app folder to remote host
+      copy:
+        src: ../app/
+        dest: /home/ubuntu/app
+        owner: ubuntu
+        group: ubuntu
+        mode: 0755
+
+    - name: Build and run Docker container
+      shell: |
+        docker build -t devops-webapp /home/ubuntu/app
+        docker run -d -p 80:5000 --restart unless-stopped --name devops-webapp devops-webapp
+      args:
+        executable: /bin/bash
