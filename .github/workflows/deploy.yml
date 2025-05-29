@@ -19,6 +19,15 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
+          - name: Checkout Code
+              uses: actions/checkout@v3
+
+          - name: Install Terraform
+            uses: hashicorp/setup-terraform@v3
+            with:
+            terraform_version: 1.6.6
+
+          - name: Terraform Init & Apply
           terraform init
           terraform apply -auto-approve
 
