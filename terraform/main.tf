@@ -1,3 +1,4 @@
+##  main.tf Defines the actual infrastructure (like EC2, VPC, etc.)
 provider "aws" {
   region = "us-east-1"
 }
